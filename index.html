@@ -88,14 +88,14 @@
     .day-label { text-align: center; font-size: 11px; color: var(--text3); padding: 4px 0; }
     .day-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid transparent; transition: all 0.12s; color: var(--text2); position: relative; }
     .day-cell.empty { cursor: default; }
-    .day-cell.menstrual { background: var(--red-light); color: var(--red-dark); border-color: var(--red-border); }
+    .day-cell.menstrual { background: #C0392B; color: #ffffff; border-color: #922B21; }
     .day-cell.follicular { background: var(--green-light); color: var(--green); border-color: var(--green-border); }
     .day-cell.ovulation { background: var(--amber-light); color: var(--amber); border-color: var(--amber-border); }
     .day-cell.luteal { background: var(--blue-light); color: var(--blue); border-color: var(--blue-border); }
-    .day-cell.fertile { box-shadow: inset 0 0 0 2px var(--pink); }
-    .day-cell.peak-fertile { background: var(--pink-light) !important; color: var(--pink-dark) !important; border-color: var(--pink) !important; box-shadow: none; }
+    .day-cell.fertile { box-shadow: inset 0 0 0 2.5px var(--pink); }
+    .day-cell.peak-fertile { background: #E84393 !important; color: #ffffff !important; border-color: #9C0047 !important; box-shadow: none; }
     .day-cell.today-marker { outline: 2.5px solid var(--text); outline-offset: 1px; }
-    .fertile-dot { width: 4px; height: 4px; background: var(--pink); border-radius: 50%; position: absolute; bottom: 2px; }
+    .fertile-dot { width: 5px; height: 5px; background: var(--pink); border-radius: 50%; position: absolute; bottom: 2px; }
 
     .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .leg { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text2); }
@@ -183,12 +183,12 @@
     </div>
     <div class="day-grid" id="day-grid"></div>
     <div class="legend">
-      <div class="leg"><div class="leg-dot" style="background:#FAECE7;border-color:#F0997B"></div>Menstrual</div>
+      <div class="leg"><div class="leg-dot" style="background:#C0392B;border-color:#922B21"></div>Menstrual</div>
       <div class="leg"><div class="leg-dot" style="background:#EAF3DE;border-color:#97C459"></div>Fol·licular</div>
       <div class="leg"><div class="leg-dot" style="background:#FAEEDA;border-color:#EF9F27"></div>Ovulació</div>
       <div class="leg"><div class="leg-dot" style="background:#E6F1FB;border-color:#85B7EB"></div>Lútia</div>
-      <div class="leg"><div class="leg-dot" style="background:#FFE0F0;border-color:#E84393"></div>Fertilitat màxima</div>
-      <div class="leg"><div class="leg-dot" style="box-shadow:inset 0 0 0 2px #E84393;background:transparent"></div>Finestra fèrtil</div>
+      <div class="leg"><div class="leg-dot" style="background:#E84393;border-color:#9C0047"></div>💗 Fertilitat màxima</div>
+      <div class="leg"><div class="leg-dot" style="box-shadow:inset 0 0 0 2.5px #E84393;background:transparent"></div>· Finestra fèrtil</div>
     </div>
     <div id="phase-summary"></div>
   </div>
@@ -249,18 +249,62 @@ TODAY.setHours(0,0,0,0);
 
 // ─── DADES ────────────────────────────────────────────────────────────────
 const PHASES = [
-  { id:'menstrual', name:'Menstrual', cycleDay:[1,2,3,4,5], icon:'🌑', iconBg:'#FAECE7', tagBg:'#FAECE7', tagColor:'#993C1D',
-    desc:'Els estrògens i la progesterona estan al mínim. La mucosa uterina s\'elimina. La baixada d\'energia és normal — és un moment per descansar i girar cap a dins.',
-    feel:['Fatiga','Rampes','Ànim baix','Repòs'], tips:['Descansar més','Moviment suau','Aliments rics en ferro','Mantenir calor'], hormones:['↓ Estrògens','↓ Progesterona','↓ LH'] },
-  { id:'follicular', name:'Fol·licular', cycleDay:[6,7,8,9,10,11,12,13], icon:'🌒', iconBg:'#EAF3DE', tagBg:'#EAF3DE', tagColor:'#3B6D11',
-    desc:'Els estrògens pugen mentre els fol·licles maduren als ovaris. Tendeixies a sentir-te amb més energia, optimista i mentalment àgil. Gran moment per iniciar projectes.',
-    feel:['Energia creixent','Optimisme','Ment clara','Sociable'], tips:['Iniciar projectes','Fer exercici','Provar coses noves','Connectar socialment'], hormones:['↑ Estrògens','↑ FSH','↓ Progesterona'] },
+  { id:'menstrual', name:'Menstrual', cycleDay:[1,2,3,4,5], icon:'🩸', iconBg:'#FAECE7', tagBg:'#FAECE7', tagColor:'#993C1D',
+    desc:'Els estrògens i la progesterona estan al mínim. La mucosa uterina s\'elimina. La baixada d\'energia és completament normal — el cos treballa dur per renovar-se. És un moment per descansar, ser amable amb tu mateixa i evitar exigir-te massa.',
+    feel:['Fatiga','Rampes','Ànim baix','Necessitat de repòs','Sensibilitat emocional'],
+    recs:[
+      '🛏️ Descansa sense culpa — el teu cos ho necessita de veritat',
+      '🍵 Tisanes de gingebre o canyella per alleujar les rampes',
+      '🧘 Yoga restauratiu o estiraments suaus, res d\'intens',
+      '🍫 Craves xocolata? El magnesi que conté és el que necessites',
+      '🛁 Bany calent amb sal d\'Epsom per relaxar la musculatura',
+      '📖 Bon moment per reflexionar, escriure un diari o descansar mentalment',
+      '🚫 Evita el cafè en excés, que pot empitjorar les rampes',
+      '❤️ La libido sol ser baixa — és totalment normal, no et forsis'
+    ],
+    hormones:['↓ Estrògens','↓ Progesterona','↓ LH'] },
+  { id:'follicular', name:'Fol·licular', cycleDay:[6,7,8,9,10,11,12,13], icon:'🌱', iconBg:'#EAF3DE', tagBg:'#EAF3DE', tagColor:'#3B6D11',
+    desc:'Els estrògens pugen mentre els fol·licles maduren als ovaris. Et sentiràs progressivament amb més energia, optimisme i claredat mental. El cervell és més creatiu i receptiu a coses noves. La libido comença a despertar-se.',
+    feel:['Energia creixent','Optimisme','Ment clara','Ganes de socialitzar','Libido que desperta'],
+    recs:[
+      '🚀 Inicia projectes nous — tens la ment en el millor moment',
+      '💪 Augmenta la intensitat de l\'exercici: spinning, running, peses',
+      '🤝 Aprofita per tenir converses difícils o negociacions importants',
+      '🎨 Creativitat al màxim — ideal per brainstorming i decisions',
+      '🥗 Afegeix proteïnes i verdures de fulla verda per donar suport als estrògens',
+      '💃 Bon moment per quedar amb amigues, cites o activitats socials',
+      '💗 La libido creix — bon moment per reconnectar amb la parella',
+      '📚 Aprèn coses noves, fes cursos, llegeix sobre temes nous'
+    ],
+    hormones:['↑ Estrògens','↑ FSH','↓ Progesterona'] },
   { id:'ovulation', name:'Ovulació', cycleDay:[14,15,16], icon:'🌕', iconBg:'#FAEEDA', tagBg:'#FAEEDA', tagColor:'#854F0B',
-    desc:'La LH puja de cop i s\'allibera un òvul. Els estrògens arriben al pic màxim. Moltes persones se senten més segures, comunicatives i físicament capaces.',
-    feel:['Energia màxima','Libido alta','Confiança','Molt sociable'], tips:['Presentacions importants','Exercici intens','Converses clau','Treball creatiu'], hormones:['↑↑ Pic de LH','Estrògens màxims','↑ Testosterona'] },
-  { id:'luteal', name:'Lútia', cycleDay:[17,18,19,20,21,22,23,24,25,26,27,28], icon:'🌘', iconBg:'#E6F1FB', tagBg:'#E6F1FB', tagColor:'#185FA5',
-    desc:'La progesterona puja per preparar-se per a un possible embaràs. Si no hi ha embaràs, les hormones baixen i poden aparèixer símptomes de SPM. L\'energia disminueix gradualment.',
-    feel:['Humor variable','Inflor','Gana','Sensibilitat'], tips:['Exercici suau','Aliments rics en magnesi','Reduir cafeïna','Prioritzar el son'], hormones:['↑ Progesterona','↓ Estrògens (final)','↓ LH'] }
+    desc:'La LH fa un pic i s\'allibera un òvul. Els estrògens i la testosterona arriben al màxim. Et sentiràs en el teu millor moment: segura, atractiva, comunicativa i física i sexualment en forma. Estos dies tens la màxima fertilitat.',
+    feel:['Energia màxima','Libido molt alta','Confiança','Molt sociable','Físicament en forma'],
+    recs:[
+      '🌟 Fes les coses més importants avui: presentacions, entrevistes, decisions grans',
+      '💑 Fertilitat màxima — si vols quedar-te embarassada, és el moment; si no, usa protecció',
+      '🏋️ El cos aguanta l\'exercici més intens — aprofita per entrenar fort',
+      '🗣️ Excel·lent per fer discursos, liderar reunions o tenir converses clau',
+      '💋 La libido és la més alta del cicle — és el millor moment per a la intimitat',
+      '✨ La pell sol estar més radiant i l\'energia és contagiosa',
+      '🍳 Menja lleuger i nutritiu per donar suport a l\'alliberament de l\'òvul',
+      '🧠 Pren decisions importants: el judici és clar i la intuïció, aguda'
+    ],
+    hormones:['↑↑ Pic de LH','Estrògens màxims','↑ Testosterona'] },
+  { id:'luteal', name:'Lútia', cycleDay:[17,18,19,20,21,22,23,24,25,26,27,28], icon:'🌾', iconBg:'#E6F1FB', tagBg:'#E6F1FB', tagColor:'#185FA5',
+    desc:'La progesterona puja per preparar-se per a un possible embaràs. La primera meitat (dies 17-21) sol ser tranquil·la i productiva. La segona meitat (dies 22-28) pot portar símptomes de SPM: irritabilitat, inflor, cansament i ganes de menjar dolç. La libido baixa gradualment.',
+    feel:['Humor variable','Inflor','Gana de dolços','Sensibilitat emocional','Libido baixant'],
+    recs:[
+      '🧘 Prioritza el son — la progesterona fa que necessitis dormir més',
+      '🥜 Menja nous, llavors de carbassa i xocolata negra (rics en magnesi)',
+      '☕ Redueix la cafeïna: empitjora la irritabilitat i la retenció de líquids',
+      '🏃 Exercici moderat: ioga, pilates, caminar — evita sobreexigir-te',
+      '📋 Bon moment per tasques de detall, organitzar, revisar, completar coses',
+      '💆 Dedica temps a tu mateixa: banys, massatges, lectura tranquil·la',
+      '💑 La libido baixa — és normal; comunica-ho a la parella sense pressió',
+      '🌿 Si tens SPM fort: omega-3, vitamina B6 i menys sal ajuden molt'
+    ],
+    hormones:['↑ Progesterona','↓ Estrògens (final)','↓ LH'] }
 ];
 
 const MOODS = [
@@ -268,7 +312,7 @@ const MOODS = [
   {emoji:'😰',label:'Ansiosa'},{emoji:'😴',label:'Cansada'},{emoji:'🤩',label:'Energitzada'},
   {emoji:'😌',label:'Tranquil·la'},{emoji:'🤗',label:'Afectuosa'}
 ];
-const SYMPTOMS = ['Rampes','Inflor','Mal de cap','Mal d\'esquena','Sensibilitat als pits','Nàusees','Taques','Insomni','Boira mental'];
+const SYMPTOMS = ['Rampes','Inflor','Mal de cap','Mal d\'esquena','Sensibilitat als pits','Nàusees','Taques','Insomni','Boira mental','Libido alta','Libido baixa','Relacions sexuals'];
 const CAT_MONTHS = ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
 const CAT_DAYS_SHORT = ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'];
 
@@ -361,8 +405,12 @@ function renderCalendar() {
     else if (fertile) cls += ' fertile';
     if (isToday) cls += ' today-marker';
 
-    const dot = fertile && !peak ? '<span class="fertile-dot"></span>' : '';
-    html += `<div class="${cls}">${d}${dot}</div>`;
+    const isMenstrual = phase.id === 'menstrual';
+    const dot = (fertile && !peak) ? '<span class="fertile-dot"></span>' : '';
+    const inner = isMenstrual ? `🩸` : `${d}${dot}`;
+    // For menstrual days show number + drop
+    const cellContent = isMenstrual ? `<span style="font-size:10px;line-height:1">${d}<br>🩸</span>` : `${d}${dot}`;
+    html += `<div class="${cls}">${cellContent}</div>`;
   }
   document.getElementById('day-grid').innerHTML = html;
   renderPhaseSummary();
@@ -384,7 +432,9 @@ function renderPhaseSummary() {
         <div class="card-sub">Cicle de ${CYCLE_LENGTH} dies · iniciat el ${fmtDate(CYCLE_START)}</div></div>
       </div>
       <div class="card-desc">${phase.desc}</div>
-      <div class="tags">${phase.feel.map(f=>`<span class="tag" style="background:${phase.tagBg};color:${phase.tagColor}">${f}</span>`).join('')}</div>
+      <div class="tags" style="margin-bottom:10px">${phase.feel.map(f=>`<span class="tag" style="background:${phase.tagBg};color:${phase.tagColor}">${f}</span>`).join('')}</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:600;margin-bottom:8px">✅ Recomanacions per avui</div>
+      <div style="display:flex;flex-direction:column;gap:5px">${phase.recs.slice(0,4).map(r=>`<div style="font-size:12px;color:var(--text2);line-height:1.5;padding:5px 10px;background:var(--bg2);border-radius:8px;border:0.5px solid var(--border)">${r}</div>`).join('')}</div>
       ${fertNote}
     </div>`;
 }
@@ -406,7 +456,9 @@ function renderTodayTab() {
       <div class="card-sub">S'espera: ${phase.feel.join(', ')}</div></div>
     </div>
     <div class="card-desc">${phase.desc}</div>
-    <div class="tags">${phase.hormones.map(h=>`<span class="tag" style="background:${phase.tagBg};color:${phase.tagColor}">${h}</span>`).join('')}</div>`;
+    <div class="tags" style="margin-bottom:10px">${phase.hormones.map(h=>`<span class="tag" style="background:${phase.tagBg};color:${phase.tagColor}">${h}</span>`).join('')}</div>
+    <div style="font-size:12px;color:var(--text2);font-weight:600;margin-bottom:8px">✅ Recomanacions per avui</div>
+    <div style="display:flex;flex-direction:column;gap:5px">${phase.recs.map(r=>`<div style="font-size:12px;color:var(--text2);line-height:1.5;padding:5px 10px;background:var(--bg2);border-radius:8px;border:0.5px solid var(--border)">${r}</div>`).join('')}</div>`;
 
   document.getElementById('mood-grid').innerHTML = MOODS.map(m =>
     `<button class="mood-btn${uiState.selectedMoods.includes(m.label)?' selected':''}" onclick="toggleMood('${m.label}')">
@@ -441,10 +493,10 @@ function renderPhasesTab() {
         <div class="card-sub">Dies ${p.cycleDay[0]}–${p.cycleDay[p.cycleDay.length-1]} del cicle</div></div>
       </div>
       <div class="card-desc">${p.desc}</div>
-      <div class="tags" style="margin-bottom:8px">${p.hormones.map(h=>`<span class="tag" style="background:${p.tagBg};color:${p.tagColor}">${h}</span>`).join('')}</div>
-      ${(p.id==='follicular'||p.id==='ovulation') ? `<div style="margin-bottom:8px"><span class="tag" style="background:#FFE0F0;color:#9C0047;border:0.5px solid #E84393">💗 Inclou dies fèrtils</span></div>` : ''}
-      <div style="font-size:12px;color:var(--text2);font-weight:600;margin-bottom:6px">Consells per a aquesta fase</div>
-      <div class="tags">${p.tips.map(t=>`<span class="tag" style="background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)">${t}</span>`).join('')}</div>
+      <div class="tags" style="margin-bottom:10px">${p.hormones.map(h=>`<span class="tag" style="background:${p.tagBg};color:${p.tagColor}">${h}</span>`).join('')}</div>
+      ${(p.id==='follicular'||p.id==='ovulation') ? `<div style="margin-bottom:10px"><span class="tag" style="background:#FFE0F0;color:#9C0047;border:0.5px solid #E84393">💗 Inclou dies fèrtils</span></div>` : ''}
+      <div style="font-size:12px;color:var(--text2);font-weight:600;margin-bottom:8px">✅ Recomanacions per avui</div>
+      <div style="display:flex;flex-direction:column;gap:6px">${p.recs.map(r=>`<div style="font-size:13px;color:var(--text2);line-height:1.5;padding:6px 10px;background:var(--bg2);border-radius:8px;border:0.5px solid var(--border)">${r}</div>`).join('')}</div>
     </div>`).join('');
 }
 
@@ -539,7 +591,7 @@ renderAll();
 
 // Registra el service worker per a ús offline
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 </script>
 </body>

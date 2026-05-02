@@ -8,6 +8,13 @@
   <meta name="apple-mobile-web-app-title" content="El meu cicle">
   <meta name="theme-color" content="#ffffff">
   <title>El meu cicle</title>
+  <script>
+    // GitHub Pages + Safari PWA fix
+    var redirect = sessionStorage.getItem('redirect');
+    if (redirect) {
+      sessionStorage.removeItem('redirect');
+    }
+  </script>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <style>

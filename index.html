@@ -155,9 +155,43 @@
     .settings-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
     .settings-input { border: 0.5px solid var(--border2); border-radius: 8px; padding: 6px 10px; font-size: 14px; background: var(--bg2); color: var(--text); width: 130px; text-align: right; }
     .apply-btn { margin-top: 20px; width: 100%; padding: 12px; border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text); border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; }
+    .onboarding { position: fixed; inset: 0; background: #2D0A1E; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 28px; text-align: center; overflow-y: auto; }
+    .onboarding.hidden { display: none; }
+    .onb-icon { width: 100px; height: 100px; border-radius: 24px; margin-bottom: 20px; object-fit: cover; }
+    .onb-title { font-size: 26px; font-weight: 700; color: #FFD0E8; margin-bottom: 10px; }
+    .onb-sub { font-size: 15px; color: #C890B0; line-height: 1.6; margin-bottom: 32px; }
+    .onb-label { font-size: 13px; font-weight: 600; color: #FFD0E8; margin-bottom: 10px; display: block; text-align: left; width: 100%; }
+    .onb-input { width: 100%; padding: 14px 16px; border-radius: var(--radius); border: 1px solid #7A3060; background: #3D1028; color: #FFD0E8; font-size: 16px; margin-bottom: 8px; -webkit-appearance: none; }
+    .onb-input:focus { outline: none; border-color: #E84393; }
+    .onb-cycle-row { display: flex; gap: 8px; width: 100%; margin-bottom: 28px; }
+    .onb-cycle-btn { flex: 1; padding: 10px 4px; border-radius: var(--radius-sm); border: 1px solid #7A3060; background: #3D1028; color: #C890B0; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .onb-cycle-btn.selected { background: #E84393; border-color: #E84393; color: white; }
+    .onb-btn { width: 100%; padding: 16px; border: none; background: #E84393; color: white; border-radius: var(--radius); font-size: 16px; font-weight: 700; cursor: pointer; }
+    .onb-btn:disabled { opacity: 0.4; cursor: default; }
+    .onb-note { font-size: 12px; color: #7A5060; margin-top: 14px; line-height: 1.5; }
   </style>
 </head>
 <body>
+
+<div class="onboarding hidden" id="onboarding">
+  <img class="onb-icon" src="icon-192.png" alt="icona app" onerror="this.style.display='none'">
+  <div class="onb-title">Benvinguda 🌙</div>
+  <div class="onb-sub">Per personalitzar el teu cicle, necessitem saber quan va començar la teva última regla.</div>
+
+  <span class="onb-label">Data de l'última regla</span>
+  <input class="onb-input" type="date" id="onb-date" max="">
+
+  <span class="onb-label" style="margin-top:16px">Durada habitual del cicle</span>
+  <div class="onb-cycle-row">
+    <button class="onb-cycle-btn" onclick="selectCycle(25)">25 dies</button>
+    <button class="onb-cycle-btn selected" onclick="selectCycle(28)">28 dies</button>
+    <button class="onb-cycle-btn" onclick="selectCycle(30)">30 dies</button>
+    <button class="onb-cycle-btn" onclick="selectCycle(32)">32 dies</button>
+  </div>
+
+  <button class="onb-btn" id="onb-btn" onclick="finishOnboarding()">Començar →</button>
+  <div class="onb-note">🔒 Les teves dades es guarden només al teu dispositiu. Ningú més hi té accés.</div>
+</div>
 
 <div class="topbar">
   <h1>🌸 El meu cicle</h1>
@@ -587,9 +621,44 @@ function nextMonth() {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
 loadSettings();
-renderAll();
 
-// Registra el service worker per a ús offline
+function checkOnboarding() {
+  const settings = JSON.parse(localStorage.getItem('cicle_settings') || '{}');
+  if (!settings.cycleStart) {
+    // Primera vegada — mostra onboarding
+    const onb = document.getElementById('onboarding');
+    onb.classList.remove('hidden');
+    // Data màxima = avui
+    const todayStr = TODAY.toISOString().split('T')[0];
+    document.getElementById('onb-date').max = todayStr;
+    document.getElementById('onb-date').value = todayStr;
+  } else {
+    renderAll();
+  }
+}
+
+let selectedCycleLength = 28;
+
+function selectCycle(n) {
+  selectedCycleLength = n;
+  document.querySelectorAll('.onb-cycle-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent.includes(n));
+  });
+}
+
+function finishOnboarding() {
+  const dateVal = document.getElementById('onb-date').value;
+  if (!dateVal) return;
+  const settings = { cycleStart: dateVal, cycleLength: selectedCycleLength, periodLength: 5 };
+  localStorage.setItem('cicle_settings', JSON.stringify(settings));
+  CYCLE_START = new Date(dateVal);
+  CYCLE_LENGTH = selectedCycleLength;
+  document.getElementById('onboarding').classList.add('hidden');
+  renderAll();
+}
+
+checkOnboarding();
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
